@@ -26,28 +26,38 @@ int main (){
     }
 
     MostrarPersonas(V, tama);
-    int ID;
-    ID = 1 + rand()%(7);
-    printf("\nID generado(para verificar): %d", ID);
-    BuscaNombrePorId(ID,V,tama);
-    
-    char *cadenaAux[50];
-    printf("\nEscriba una palabra clave para ser buscada en frase:");
-    scanf("%s",cadenaAux);
+    char opcion[7];
 
-    int tamCadena = strlen(cadenaAux);
-    char *clave1 = (char *) malloc (tamCadena * sizeof(char) + 1);
+    printf("\nIngrese si quiere busqueda por(id o palabra):");
+    scanf("%s",opcion);
+    //strcmp(cad1,cad2) == 0 si cad1 == cad 2
+    if(strcmp("ID",opcion) == 0){
 
-    strcpy(clave1,cadenaAux);
+        int ID = 1 + rand()%(7);
+        printf("\nID generado(para verificar): %d", ID);
+        BuscaNombrePorId(ID,V,tama);
 
-    char *resultado = BuscaNombrePorPalabra(clave1,V,tama);
-
-    if(resultado != NULL){
-        printf("La 1era palabra encontrada fue: %s\n", resultado);
     }else{
-        printf("No se encontro nignuna palabra: %d",-1);
-    }
 
+        char *cadenaAux[50];
+        printf("\nEscriba una palabra clave para ser buscada en frase:");
+        scanf("%s",cadenaAux);
+
+        int tamCadena = strlen(cadenaAux);
+        char *clave1 = (char *) malloc (tamCadena * sizeof(char) + 1);
+
+        strcpy(clave1,cadenaAux);
+
+        char *resultado = BuscaNombrePorPalabra(clave1,V,tama);
+
+        if(resultado != NULL){
+            printf("La 1era palabra encontrada fue: %s\n", resultado);
+        }else{
+            printf("No se encontro nignuna palabra: %d",-1);
+        }
+        
+    }
+    
     liberarMemoria(V, tama);
 
     return 0;
