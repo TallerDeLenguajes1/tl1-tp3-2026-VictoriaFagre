@@ -34,6 +34,14 @@ float calcularCosto(char *tipo, Prod *prodAux, int cantAux){
     return 0; //si no encontro nada al final
 }
 
+float costoPorCliente(Prod *prodAux, int cantAux){
+    float precioPorCliente = 0.00;
+    for(int i = 0; i < cantAux; i++){
+        precioPorCliente = precioPorCliente + (prodAux[i].Cantidad * prodAux[i].PrecioUnitario);
+    }
+    return precioPorCliente;
+}
+
 void liberarPuntero(Clien *clienAux, int cantCliente){
     for(int i = 0; i < cantCliente; i++){
         free(clienAux[i].NombreCliente);
@@ -117,6 +125,9 @@ int main(){
         
         float costo = calcularCosto(tipoAux, prod, cantidadAux);
         printf("El costo del producto es: %.2f\n", costo);
+
+        float costoxCliente = costoPorCliente(prod, cantidadAux);
+        printf("Costo total : %.2f\n", costoxCliente);
         
     }
 
