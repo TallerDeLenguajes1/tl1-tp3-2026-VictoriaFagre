@@ -19,21 +19,30 @@ typedef struct Cliente{
     Prod *Productos; //El tamaño de este arreglo depende de la variable “CantidadProductosAPedir”  
 }Clien;
 
-void liberarPuntero(Clien *clienAux, int cantCliente){
-    for(int i = 0; i < cantCliente; i++){
-        free(clienAux[i].NombreCliente);
-
-        free(clienAux[i].Productos);
-    }
-
-    free(clienAux);
-}
-
-
 void limpioBuffer(){ 
     int c;
     while((c = getchar()) != '\n' && c != EOF){}
 }
+
+float calcularCosto(char *tipo, Prod *prodAux, int cantAux){
+
+    for (int i = 0; i < cantAux; i++){
+        if (strcmp(prodAux[i].TipoProducto,tipo) == 0){
+            return prodAux[i].PrecioUnitario * prodAux[i].Cantidad;
+        }
+    }
+    return 0; //si no encontro nada al final
+}
+
+void liberarPuntero(Clien *clienAux, int cantCliente){
+    for(int i = 0; i < cantCliente; i++){
+        free(clienAux[i].NombreCliente);
+        free(clienAux[i].Productos);
+    }
+    free(clienAux);
+}
+
+
 
 int main(){
 
@@ -42,7 +51,7 @@ int main(){
     int cantidadCliente;
     printf("Ingrese la cantidad de clientes:");
     scanf("%d",&cantidadCliente);
-
+    //obligatorio luego de scanf y antes de fgets
     limpioBuffer();
 
     //Clien cliente[cantidadCliente];
@@ -55,6 +64,9 @@ int main(){
         char nombreAux[50];
         printf("Ingrese el nombre del cliente %d:", i+1);
         fgets(nombreAux, 50, stdin);
+
+        nombreAux[strcspn(nombreAux, "\n")] = '\0'; //saco el /0 (por si uso strcmp)
+
         int longNombre = strlen(nombreAux);
         char *nombre = (char*)malloc(longNombre * sizeof(char)+1); //liberar desp
         strcpy(nombre,nombreAux);
@@ -86,10 +98,26 @@ int main(){
            prod[j].PrecioUnitario = 10 + rand() % (100-10+1);
            printf("Precio unitario: %.2f\n",prod[j].PrecioUnitario);
         }
+
         /*Hago que el campo puntero del struct cliente apunte al inicio de la dirección
          de memoria de mi estructura de datos definida a partir de la cantidad de productos*/ 
 
-        cliente[i].Productos = prod;   
+        cliente[i].Productos = prod; 
+
+        char tipoAux[20];
+        
+        printf("Ingrese el tipo de producto a calcular el precio:");
+        fgets(tipoAux,20,stdin);
+        // int longtipoAux = strlen(tipoAux);
+        // char *tipo = (char*)malloc(longtipoAux*sizeof(char)+1);
+
+        // strcpy(tipo,tipoAux);
+
+        tipoAux[strcspn(tipoAux, "\n")] = '\0';
+        
+        float costo = calcularCosto(tipoAux, prod, cantidadAux);
+        printf("El costo del producto es: %.2f\n", costo);
+        
     }
 
     liberarPuntero(cliente, cantidadCliente);

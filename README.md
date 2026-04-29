@@ -25,5 +25,25 @@
 
 *fgets(donde_guardo, cuanto_guardo, de_donde_lo_tomo);*
 
+# Observación 29/04/26
+*Como solo uso una palabra para pasarla a una función e imprimir un precio, y no la voy a guardar en el struct para siempre, no tiene sentido pedir memoria al Heap con malloc. Estaría gastando más tiempo de procesamiento en pedir, copiar y liberar la memoria que lo que "ahorro" de espacio.*
+
+*¿Cuándo SÍ es necesario el puntero acortado?*
+*Es necesario cuando el dato debe persistir. Por ejemplo, en el NombreCliente:*
+*Ahí sí uso malloc porque el cliente va a vivir durante toda la ejecución del programa. Si dejara todos los nombres con un tamaño fijo de 50, y tenés 1000 clientes, desperdiciaría muchísima RAM. Pero para una búsqueda rápida de un segundo, el buffer de 20 es despreciable.*
+
+*Si hubiese querido hacer un puntero de la forma anterior tendría que:*
+*1. Leo en el buffer: fgets(tipoAux, 20, stdin).*
+
+*2. Limpio el buffer: tipoAux[strcspn(tipoAux, "\n")] = '\0'.*
+
+*3. Mido el buffer ya limpio: int largo = strlen(tipoAux).*
+
+*4.Reservo exacto: char *tipo = (char*)malloc(largo + 1).*
+
+*5. Copio: strcpy(tipo, tipoAux).*
+
+*MUY IMPORTANTE: Al final del for, debo hacer free(tipo)*
+
 
 
